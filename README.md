@@ -1,4 +1,4 @@
-# thaiaddress
+# thai_provinces
 
 ข้อมูลเขตการปกครองของประเทศไทย (จังหวัด/อำเภอ/ตำบล พร้อมรหัสไปรษณีย์) สำหรับภาษา Dart ฝังข้อมูลมาในตัว ค้นหา/เติมคำอัตโนมัติ/ตรวจสอบที่อยู่ได้ทันที ไม่ต้องต่อเน็ต ไม่พึ่ง Flutter
 
@@ -12,11 +12,11 @@ runtime, and **no Flutter dependency** (works in CLI, server and Flutter alike).
 
 ```yaml
 dependencies:
-  thaiaddress: ^0.1.0
+  thai_provinces: ^0.1.0
 ```
 
 ```sh
-dart pub add thaiaddress
+dart pub add thai_provinces
 ```
 
 Requires Dart SDK 3.0+.
@@ -42,7 +42,7 @@ Requires Dart SDK 3.0+.
 ### Look up by code and read names
 
 ```dart
-import 'package:thaiaddress/thaiaddress.dart';
+import 'package:thai_provinces/thai_provinces.dart';
 
 final p = provinceByCode(10);          // nullable; null if unknown
 print('${p!.nameTh} / ${p.nameEn}');   // กรุงเทพมหานคร / Bangkok

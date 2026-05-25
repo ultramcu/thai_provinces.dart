@@ -1,5 +1,5 @@
 // Runnable example: `dart run example/example.dart`.
-import 'package:thaiaddress/thaiaddress.dart';
+import 'package:thai_provinces/thai_provinces.dart';
 
 void main() {
   // 1. Look up by official DOPA code and read Thai/English names + region.
