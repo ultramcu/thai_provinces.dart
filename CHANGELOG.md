@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Shorten the package description to pub.dev's 60–180 char range (pub points 150→160). No code changes.
+
 ## 0.1.0
 
 - Initial release. Pure-Dart port of `go-thaiaddress`.

@@ -1,9 +1,8 @@
 name: thai_provinces
 description: >-
-  Thailand administrative areas (province, district, subdistrict) with postal
-  codes — offline lookup by official geocode, hierarchy, name search,
-  autocomplete, validation and address resolution. Pure Dart, no dependencies.
-version: 0.1.0
+  Thailand province/district/subdistrict data with postal codes for Dart &
+  Flutter: offline lookup, search, validation, and address resolution. Pure Dart.
+version: 0.1.1
 repository: https://github.com/ultramcu/thai_provinces.dart
 homepage: https://github.com/ultramcu/thai_provinces.dart
 issue_tracker: https://github.com/ultramcu/thai_provinces.dart/issues
