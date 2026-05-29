@@ -105,6 +105,34 @@ try {
 }
 ```
 
+### Serialize to / from JSON
+
+Every model (`Province`, `District`, `Subdistrict`, `AddressMatch`) is
+self-describing: `toJson()` emits all fields, and `fromJson` rebuilds the value
+with **no dataset lookup**, so `X.fromJson(x.toJson()) == x`. A `Province`'s
+region is stored as its integer `region` code (1..6).
+
+```dart
+import 'dart:convert';
+import 'package:thai_provinces/thai_provinces.dart';
+
+final p = provinceByCode(10)!;            // Bangkok
+final wire = jsonEncode(p.toJson());
+// {"code":10,"nameTh":"กรุงเทพมหานคร","nameEn":"Bangkok","region":2}
+
+final back = Province.fromJson(jsonDecode(wire) as Map<String, dynamic>);
+print(back == p);                         // true
+
+// AddressMatch nests each level's JSON:
+final m = resolve(const AddressQuery(subdistrict: 'สุเทพ', postcode: 50200)).first;
+final m2 = AddressMatch.fromJson(
+    jsonDecode(jsonEncode(m.toJson())) as Map<String, dynamic>);
+print(m2 == m);                           // true
+```
+
+An unknown `region` code passed to `Province.fromJson` throws a
+`FormatException`; a missing/wrongly-typed key throws.
+
 ### Validate a code triple
 
 ```dart

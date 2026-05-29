@@ -1,4 +1,5 @@
 import 'data.dart';
+import 'json_helpers.dart';
 import 'models.dart';
 import 'normalize.dart';
 import 'search.dart';
@@ -129,6 +130,28 @@ class AddressMatch {
 
   /// The matched subdistrict.
   final Subdistrict subdistrict;
+
+  /// A self-describing JSON map nesting the [province], [district] and
+  /// [subdistrict] JSON under those keys. Round-trippable via
+  /// [AddressMatch.fromJson].
+  Map<String, dynamic> toJson() => {
+        'province': province.toJson(),
+        'district': district.toJson(),
+        'subdistrict': subdistrict.toJson(),
+      };
+
+  /// Rebuilds an [AddressMatch] purely from a [toJson] map, with no dataset
+  /// lookup: each level is reconstructed from its own nested map via the
+  /// model's `fromJson`. A missing or wrongly-typed key throws a
+  /// [FormatException] naming the offending key.
+  factory AddressMatch.fromJson(Map<String, dynamic> json) {
+    const where = 'AddressMatch.fromJson';
+    return AddressMatch(
+      province: Province.fromJson(reqMap(json, 'province', where)),
+      district: District.fromJson(reqMap(json, 'district', where)),
+      subdistrict: Subdistrict.fromJson(reqMap(json, 'subdistrict', where)),
+    );
+  }
 
   @override
   bool operator ==(Object other) =>

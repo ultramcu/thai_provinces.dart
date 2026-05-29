@@ -1,4 +1,5 @@
 import 'data.dart';
+import 'json_helpers.dart';
 import 'region.dart';
 
 /// A Thai province (จังหวัด).
@@ -26,6 +27,38 @@ class Province {
 
   /// The geographic region this province belongs to.
   final Region region;
+
+  /// A self-describing JSON map of this province.
+  ///
+  /// The [region] is emitted as its integer [Region.code] under the key
+  /// `region`. The map is round-trippable via [Province.fromJson].
+  Map<String, dynamic> toJson() => {
+        'code': code,
+        'nameTh': nameTh,
+        'nameEn': nameEn,
+        'region': region.code,
+      };
+
+  /// Rebuilds a [Province] purely from a [toJson] map, with no dataset lookup.
+  ///
+  /// The `region` value must be a valid [Region.code] (1..6). Any malformed
+  /// input — an unknown region code, or a missing or wrongly-typed key —
+  /// throws a [FormatException] naming the offending key.
+  factory Province.fromJson(Map<String, dynamic> json) {
+    const where = 'Province.fromJson';
+    final regionCode = reqInt(json, 'region', where);
+    final region = Region.fromCode(regionCode);
+    if (region == null) {
+      throw FormatException('$where: unknown region code '
+          '$regionCode (expected 1..6)');
+    }
+    return Province(
+      code: reqInt(json, 'code', where),
+      nameTh: reqString(json, 'nameTh', where),
+      nameEn: reqString(json, 'nameEn', where),
+      region: region,
+    );
+  }
 
   /// The districts of this province, ordered by code. Empty for an unknown
   /// province.
@@ -69,6 +102,27 @@ class District {
 
   /// English name.
   final String nameEn;
+
+  /// A self-describing JSON map of this district. Round-trippable via
+  /// [District.fromJson].
+  Map<String, dynamic> toJson() => {
+        'code': code,
+        'provinceCode': provinceCode,
+        'nameTh': nameTh,
+        'nameEn': nameEn,
+      };
+
+  /// Rebuilds a [District] purely from a [toJson] map, with no dataset lookup.
+  /// A missing or wrongly-typed key throws a [FormatException] naming the key.
+  factory District.fromJson(Map<String, dynamic> json) {
+    const where = 'District.fromJson';
+    return District(
+      code: reqInt(json, 'code', where),
+      provinceCode: reqInt(json, 'provinceCode', where),
+      nameTh: reqString(json, 'nameTh', where),
+      nameEn: reqString(json, 'nameEn', where),
+    );
+  }
 
   /// The province this district belongs to, or `null` if unknown.
   Province? get province => provinceByCode(provinceCode);
@@ -122,6 +176,30 @@ class Subdistrict {
 
   /// 5-digit Thai postal code (รหัสไปรษณีย์).
   final int postcode;
+
+  /// A self-describing JSON map of this subdistrict. Round-trippable via
+  /// [Subdistrict.fromJson].
+  Map<String, dynamic> toJson() => {
+        'code': code,
+        'districtCode': districtCode,
+        'nameTh': nameTh,
+        'nameEn': nameEn,
+        'postcode': postcode,
+      };
+
+  /// Rebuilds a [Subdistrict] purely from a [toJson] map, with no dataset
+  /// lookup. A missing or wrongly-typed key throws a [FormatException] naming
+  /// the key.
+  factory Subdistrict.fromJson(Map<String, dynamic> json) {
+    const where = 'Subdistrict.fromJson';
+    return Subdistrict(
+      code: reqInt(json, 'code', where),
+      districtCode: reqInt(json, 'districtCode', where),
+      nameTh: reqString(json, 'nameTh', where),
+      nameEn: reqString(json, 'nameEn', where),
+      postcode: reqInt(json, 'postcode', where),
+    );
+  }
 
   /// The district this subdistrict belongs to, or `null` if unknown.
   District? get district => districtByCode(districtCode);

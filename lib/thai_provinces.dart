@@ -15,6 +15,20 @@
 /// final subs = byPostcode(10200); // subdistricts using a zip
 /// ```
 ///
+/// Every model is JSON-serializable and self-describing: `toJson()` emits all
+/// fields (a [Province]'s region as its int `region` code), and the matching
+/// `fromJson` factory rebuilds the value without any dataset lookup, so
+/// `X.fromJson(x.toJson()) == x`.
+///
+/// ```dart
+/// import 'dart:convert';
+///
+/// final p = provinceByCode(10)!;
+/// final wire = jsonEncode(p.toJson());            // {"code":10,...,"region":2}
+/// final back = Province.fromJson(jsonDecode(wire) as Map<String, dynamic>);
+/// assert(back == p);
+/// ```
+///
 /// Thai subdistrict names are not unique — many names repeat across provinces
 /// (e.g. "ในเมือง") — so name lookups return lists; resolve to a single place
 /// with the province/district context or a postal code.
