@@ -32,8 +32,9 @@ List<District> findDistricts(String name) {
 
 /// Returns every subdistrict whose Thai or English name matches [name] exactly
 /// after normalization, ordered by code. An empty/whitespace query returns
-/// `[]`. Subdistrict names are highly non-unique (e.g. "ในเมือง" occurs in 22
-/// provinces), so this commonly returns many results; disambiguate with
+/// `[]`. Subdistrict names are highly non-unique (e.g. "ในเมือง" names 22
+/// subdistricts across 19 provinces), so this commonly returns many results;
+/// disambiguate with
 /// [resolve] using province/district/postcode context.
 List<Subdistrict> findSubdistricts(String name) {
   final q = normalizeName(name);

@@ -1,5 +1,10 @@
 # thai_provinces
 
+[![pub package](https://img.shields.io/pub/v/thai_provinces.svg)](https://pub.dev/packages/thai_provinces)
+[![pub points](https://img.shields.io/pub/points/thai_provinces)](https://pub.dev/packages/thai_provinces/score)
+[![likes](https://img.shields.io/pub/likes/thai_provinces)](https://pub.dev/packages/thai_provinces/score)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 ข้อมูลเขตการปกครองของประเทศไทย (จังหวัด/อำเภอ/ตำบล พร้อมรหัสไปรษณีย์) สำหรับภาษา Dart ฝังข้อมูลมาในตัว ค้นหา/เติมคำอัตโนมัติ/ตรวจสอบที่อยู่ได้ทันที ไม่ต้องต่อเน็ต ไม่พึ่ง Flutter
 
 A pure-Dart, MIT-licensed library of Thailand's administrative areas — 77
@@ -12,7 +17,7 @@ runtime, and **no Flutter dependency** (works in CLI, server and Flutter alike).
 
 ```yaml
 dependencies:
-  thai_provinces: ^0.1.0
+  thai_provinces: ^0.2.0
 ```
 
 ```sh
@@ -35,9 +40,45 @@ Requires Dart SDK 3.0+.
 - **Validation** of a province/district/subdistrict triple.
 - **Address resolution** — match free-form fragments (plus an optional postcode)
   to concrete `Province`/`District`/`Subdistrict` results.
+- **Cascading address forms** — drive province → district → subdistrict dropdowns
+  and auto-fill the postcode (see the recipe below).
+- **JSON serialization** — every model has `toJson()`/`fromJson` with a
+  round-trip guarantee, ready for REST APIs and local storage.
 - **Thai + English names** for every area, plus six regions.
 
 ## Quick start
+
+### Build a cascading address form
+
+The most common use: three linked dropdowns — province → district → subdistrict
+— that auto-fill the postcode. The data layer is identical whether you wire it to
+Flutter `DropdownButtonFormField`s or a CLI prompt.
+
+```dart
+import 'package:thai_provinces/thai_provinces.dart';
+
+// 1. Province dropdown — all 77, ordered by code:
+final provinceItems = provinces();
+
+// 2. User picks a province -> show its districts:
+final selectedProvince = provinceByCode(50)!;        // เชียงใหม่
+final districtItems = selectedProvince.districts;     // ordered by code
+
+// 3. User picks a district -> show its subdistricts:
+final selectedDistrict = districtItems.first;
+final subdistrictItems = selectedDistrict.subdistricts;
+
+// 4. User picks a subdistrict -> the postcode auto-fills:
+final selectedSubdistrict = subdistrictItems.first;
+final postcode = selectedSubdistrict.postcode;        // the official postcode
+
+print('${selectedProvince.nameTh} > ${selectedDistrict.nameTh} > '
+    '${selectedSubdistrict.nameTh} — $postcode');
+```
+
+In Flutter, feed each list to a `DropdownButtonFormField`, and clear the child
+selections whenever a parent changes. Everything is in memory, so rebuilding the
+options on every change is instant.
 
 ### Look up by code and read names
 
@@ -74,7 +115,7 @@ for (final s in byPostcode(50200)) {
 }
 
 // All postcodes within a district:
-print(postcodesOf(5001)); // e.g. [50200, 50300, ...]
+print(postcodesOf(5001)); // e.g. [50000, 50100, 50200, 50300]
 ```
 
 ### Autocomplete (prefix search)
@@ -145,8 +186,8 @@ try {
 
 ## Caveat: duplicate names
 
-Many subdistrict names repeat across different provinces (e.g. "ในเมือง" occurs
-in 22 provinces), so name-based lookups (`findSubdistricts`,
+Many subdistrict names repeat across different provinces (e.g. "ในเมือง" names
+22 subdistricts across 19 provinces), so name-based lookups (`findSubdistricts`,
 `searchSubdistricts`) return a **`List`**, not a single result. Disambiguate
 with district/province context or a postcode — `resolve(AddressQuery(...))` is
 built for exactly this.
