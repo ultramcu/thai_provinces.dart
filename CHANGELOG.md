@@ -1,3 +1,10 @@
+## 0.3.1
+
+- Docs: cite the source dataset — the Department of Provincial Administration
+  (กรมการปกครอง, DOPA) data published on
+  [data.go.th](https://data.go.th/dataset/item_c6d42e1b-3219-47e1-b6b7-dfe914f27910)
+  — in the data-source section. No code changes.
+
 ## 0.3.0
 
 - Add `parseThaiAddress(String) -> ThaiAddressParseResult` — a best-effort,
