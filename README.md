@@ -212,9 +212,12 @@ This library is MIT-licensed (see [`LICENSE`](LICENSE)).
 The embedded dataset is a reshaped snapshot of
 [`github.com/kongvut/thai-province-data`](https://github.com/kongvut/thai-province-data)
 by Kongvut Sangkla, used under the MIT License, with district codes validated
-against the Department of Provincial Administration (DOPA) dataset. Official
-two-digit province codes were derived and the field layout slimmed, but it is
-the same underlying data.
+against the **Department of Provincial Administration (กรมการปกครอง, DOPA)**
+dataset published on Thailand's open-government-data portal
+([data.go.th](https://data.go.th/dataset/item_c6d42e1b-3219-47e1-b6b7-dfe914f27910)).
+Official two-digit province codes were derived and the field layout slimmed, but
+it is the same underlying data. The factual codes/names are government
+administrative data; credit DOPA when redistributing.
 
 This package is a faithful pure-Dart port of the Go library
 [`go-thaiaddress`](https://github.com/ultramcu/go-thaiaddress).
