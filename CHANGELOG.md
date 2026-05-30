@@ -1,3 +1,20 @@
+## 0.3.0
+
+- Add `parseThaiAddress(String) -> ThaiAddressParseResult` — a best-effort,
+  never-throwing parser for free-text Thai addresses (the kind people paste from
+  chat/notes/receipts). It recognizes a 5-digit postcode (Arabic or Thai
+  digits), and province / district / subdistrict by their markers
+  (`จังหวัด`/`จ.`, `อำเภอ`/`อ.`/`เขต`, `ตำบล`/`ต.`/`แขวง`, plus the
+  `กทม`/`กรุงเทพฯ` aliases), then reconciles names against the postcode and
+  pins only the levels it can determine unambiguously — an ambiguous level is
+  left `null` rather than guessed, and the resolved province→district→
+  subdistrict chain is always internally consistent.
+- `ThaiAddressParseResult` carries `province` / `district` / `subdistrict` /
+  `postcode` (as found) and `remainder` (the leftover house-number/road text
+  with the matched area tokens and postcode removed), plus `isComplete` /
+  `isEmpty`, value equality and `toString()`.
+- Pure Dart, no new dependencies — built on the existing lookup primitives.
+
 ## 0.2.0
 
 - JSON serialization for every model. `Province`, `District`, `Subdistrict` and

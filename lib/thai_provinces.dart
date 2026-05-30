@@ -51,6 +51,7 @@ export 'src/data.dart'
         postcodesOf;
 export 'src/models.dart' show Province, District, Subdistrict;
 export 'src/normalize.dart' show normalizeName;
+export 'src/parse.dart' show ThaiAddressParseResult, parseThaiAddress;
 export 'src/region.dart' show Region;
 export 'src/resolve.dart'
     show
